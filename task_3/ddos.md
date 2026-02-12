@@ -25,41 +25,21 @@ The goal of this task is to **detect potential DDoS attack intervals** by analyz
 4.  **Detect DDoS activity** where actual requests exceed this threshold.
 5.  **Merge consecutive spikes** into defined attack intervals for reporting clarity.
 
----
-
-
-## 4. Python Code (Main Fragments)
-
-```python
-import pandas as pd
-from sklearn.linear_model import LinearRegression
-
-# Aggregate requests per second
-df_counts = df.groupby('timestamp').size().reset_index(name='count')
-
-# Prepare data for Regression
-X = np.array(range(len(df_counts))).reshape(-1, 1)
-y = df_counts['count'].values
-
-# Regression modeling
-reg = LinearRegression()
-reg.fit(X, y)
-y_pred = reg.predict(X)
-
-# Detect DDoS Threshold
-threshold = y_pred.mean() + (3 * y_pred.std())
-ddos_events = df_counts[df_counts['count'] > threshold]
-
-
-
-
-## 5. Visualization
+## 4. Visualization
 
 ![Requests vs Regression](requests_regression.png)
 
 - **Blue line:** requests per second  
 - **Red line:** regression model of normal traffic  
-- **Orange areas:** detected DDoS intervals  
+- **Orange areas:** detected DDoS intervals
+  
+---
+## 5. Conclusion
+Regression analysis effectively identifies abnormal traffic spikes that correspond to DDoS attacks. By utilizing statistical thresholding (3σ), we can distinguish between natural traffic growth and malicious surges. This approach allows security teams to reproduce and verify attack intervals for better incident response.
+
+
+
+
 
 ---
 
@@ -86,11 +66,9 @@ y_pred = reg.predict(X)
 threshold = y_pred.mean() + (3 * y_pred.std())
 ddos_events = df_counts[df_counts['count'] > threshold]
 
-7. Source Code
-The full Python script used for this analysis is located in ddos_analysis.py within the task_3 folder.
 
-8. Conclusion
-Regression analysis effectively identifies abnormal traffic spikes that correspond to DDoS attacks. By utilizing statistical thresholding (3σ), we can distinguish between natural traffic growth and malicious surges. This approach allows security teams to reproduce and verify attack intervals for better incident response.
+
+
 
 
 
